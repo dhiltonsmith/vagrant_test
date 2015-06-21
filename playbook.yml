@@ -20,6 +20,11 @@
     sudo: true
   - name: Install Jenkins CLI Tool
     copy: src=./mytemplates/jenkins-cli.jar dest=/home/vagrant/jenkins-cli.jar mode=0665
+  - name: Sleeping After Jenkins Restart
+    command: sleep 10
+    register: jenkins_sleep
+    when: config_update.changed
   - name: Start Jenkins Job
     command: java -jar jenkins-cli.jar -s http://192.168.111.222:8080/ build install_lighttpd
     sudo: true
+    when: jenkins_sleep.changed
