@@ -1,0 +1,6 @@
+---
+- hosts: all
+  tasks:
+  - name: Install jenkins
+    apt: name=jenkins
+    sudo: true
