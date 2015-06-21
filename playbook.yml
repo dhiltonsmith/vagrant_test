@@ -10,6 +10,9 @@
   - name: Jenkins Job File
     template: src=./mytemplates/config.xml dest=/var/lib/jenkins/jobs/install_lighttpd/config.xml owner=jenkins group=jenkins mode=0644
     sudo: true
+  - name: Restarting Jenkins to Pull in Config File
+    command: service jenkins restart
+    sudo: true
   - name: Install Lighttpd Dependancies
     apt: name=make,libpcre3-dev,libbz2-dev update_cache=yes
     sudo: true
