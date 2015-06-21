@@ -1,6 +1,20 @@
 ---
 - hosts: all
   tasks:
-  - name: Install jenkins
-    apt: name=jenkins
+  - name: Install Jenkins
+    apt: name=jenkins update_cache=yes
+    sudo: true
+  - name: Jenkins Job Path
+    file: path=/var/lib/jenkins/jobs/install_lighttpd state=directory owner=jenkins group=jenkins mode=0755
+    sudo: true
+  - name: Jenkins Job File
+    template: src=./mytemplates/config.xml dest=/var/lib/jenkins/jobs/install_lighttpd/config.xml owner=jenkins group=jenkins mode=0644
+    sudo: true
+  - name: Install Lighttpd Dependancies
+    apt: name=make,libpcre3-dev,libbz2-dev update_cache=yes
+    sudo: true
+  - name: Install Jenkins CLI Tool
+    command: /usr/bin/wget http://192.168.111.222:8080/jnlpJars/jenkins-cli.jar
+  - name: Start Jenkins Job
+    command: java -jar jenkins-cli.jar -s http://192.168.111.222:8080/ build install_lighttpd
     sudo: true
